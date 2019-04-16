@@ -1,0 +1,22 @@
+ext {
+    //Version
+    butterknifeVersion = '8.8.0'
+    okhttpVersion = '3.12.1'
+    retrofitVersion = '2.5.0'
+
+
+
+
+
+
+    libs = [
+            butterknife                     : "com.jakewharton:butterknife:$butterknifeVersion",
+            butterknife_annotation_processor: "com.jakewharton:butterknife-compiler:$butterknifeVersion",
+            okhttp                          : "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            retrofit                        : ["com.squareup.retrofit2:retrofit:$retrofitVersion",
+                                               "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+                                               "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"],
+
+
+    ]
+}
