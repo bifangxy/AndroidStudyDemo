@@ -3,6 +3,7 @@ ext {
     butterknifeVersion = '8.8.0'
     okhttpVersion = '3.12.1'
     retrofitVersion = '2.5.0'
+    permissionVersion = "3.3.1"
 
 
 
@@ -16,6 +17,8 @@ ext {
             retrofit                        : ["com.squareup.retrofit2:retrofit:$retrofitVersion",
                                                "com.squareup.retrofit2:converter-gson:$retrofitVersion",
                                                "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"],
+            permission                      : "com.github.hotchemi:permissionsdispatcher:$permissionVersion",
+            permission_annotation_processor : "com.github.hotchemi:permissionsdispatcher-processor:$permissionVersion"
 
 
     ]

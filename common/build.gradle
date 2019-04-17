@@ -34,4 +34,6 @@ dependencies {
 
     implementation rootProject.ext.libs.butterknife
     annotationProcessor rootProject.ext.libs.butterknife_annotation_processor
+    implementation rootProject.ext.libs.permission
+    annotationProcessor rootProject.ext.libs.permission_annotation_processor
 }

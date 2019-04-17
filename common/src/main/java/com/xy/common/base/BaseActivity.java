@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.xy.common.R;
 import com.xy.common.utils.ActivityUtils;
 import com.xy.common.utils.StatusBarUtil;
 
@@ -33,13 +32,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         onCreateTask(savedInstanceState);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setTransparent(this);
+        StatusBarUtil.setLightMode(this);
         mUnbinder = ButterKnife.bind(this);
         initData();
-
+        initEvent();
+//
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-////            initTitleBar();
-////        }
+//            initTitleBar();
+//        }
 
         ActivityUtils.addActivity(this);
     }
@@ -73,6 +74,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayoutId();
 
     protected abstract void initData();
+
+    protected abstract void initEvent();
 
 
 
