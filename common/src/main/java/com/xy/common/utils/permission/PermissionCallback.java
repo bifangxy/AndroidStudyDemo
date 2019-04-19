@@ -6,7 +6,7 @@ package com.xy.common.utils.permission;
  */
 public interface PermissionCallback {
 
-    void onPermissionGrated();
+    void onPermissionGranted();
 
     void onPermissionDenied();
 }

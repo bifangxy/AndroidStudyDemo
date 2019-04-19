@@ -1,87 +1,41 @@
 package com.xy.camerademo.camera;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.params.StreamConfigurationMap;
-import android.media.Image;
-import android.media.ImageReader;
+import android.graphics.Matrix;
+import android.graphics.SurfaceTexture;
 import android.os.Build;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-import android.util.SparseIntArray;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.xy.camerademo.R;
 import com.xy.common.base.BaseActivity;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+import com.xy.common.utils.permission.Permission;
+import com.xy.common.utils.permission.PermissionCallback;
+import com.xy.common.utils.permission.PermissionHelper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * Created by xieying on 2019/4/16.
  * Description：
  */
 public class CameraActivity extends BaseActivity {
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
-
-    @BindView(R.id.camera_surface_preview)
-    SurfaceView mCameraSurfacePreview;
+    @BindView(R.id.camera_textureView_preview)
+    TextureView mCameraTextureViewPreview;
     @BindView(R.id.camera_bt_back)
     Button mCameraBtBack;
     @BindView(R.id.camera_bt_phone)
     Button mCameraBtPhone;
     @BindView(R.id.camera_iv_image)
     ImageView mCameraIvImage;
-
-    private SurfaceHolder mSurfaceHolder;
-
-    private CameraManager mCameraManager;
-
-    private int mViewWidth;
-
-    private int mViewHeight;
-
-    private Handler mChildHandler;
-
-    private Handler mMainHandler;
-
-    private String mCameraId;
-
-    private ImageReader mImageReader;
-
-    private CameraCaptureSession mCameraCaptureSession;
-
-    private CameraDevice mCameraDevice;
 
 
     @Override
@@ -91,189 +45,100 @@ public class CameraActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mSurfaceHolder = mCameraSurfacePreview.getHolder();
-        mSurfaceHolder.setKeepScreenOn(true);
+
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected void initEvent() {
-        mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                initCamera2();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (null != mCameraDevice) {
-                    mCameraDevice.close();
-                    mCameraDevice = null;
-                }
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void initCamera2() {
-        mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-
-        try {
-            for (String cameraId : mCameraManager.getCameraIdList()) {
-                CameraCharacteristics cameraCharacteristics = mCameraManager.
-                        getCameraCharacteristics(cameraId);
-                if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
-                        CameraCharacteristics.LENS_FACING_FRONT)
-                    continue;
-
-                StreamConfigurationMap streamConfigurationMap = cameraCharacteristics.
-                        get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                mCameraId = cameraId;
-            }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-
-
-        HandlerThread handlerThread = new HandlerThread("Camera2");
-        handlerThread.start();
-        mChildHandler = new Handler(handlerThread.getLooper());
-        mMainHandler = new Handler(getMainLooper());
-        mImageReader = ImageReader.newInstance(1080, 1920,
-                ImageFormat.JPEG, 1);
-        mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader reader) {
-                mCameraDevice.close();
-                mCameraSurfacePreview.setVisibility(View.GONE);
-                mCameraIvImage.setVisibility(View.VISIBLE);
-
-                Image image = reader.acquireLatestImage();
-                ByteBuffer byteBuffer = image.getPlanes()[0].getBuffer();
-                byte[] bytes = new byte[byteBuffer.remaining()];
-                byteBuffer.get(bytes);
-
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                if (bitmap != null)
-                    mCameraIvImage.setImageBitmap(bitmap);
-                image.close();
-            }
-        }, mMainHandler);
-
-
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, 1);
-            return;
-        }
-
-        try {
-            mCameraManager.openCamera(mCameraId, mStateCallback, mMainHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+    protected void onResume() {
+        super.onResume();
+        CameraUtils.getInstance().startCameraThread();
+        if (!mCameraTextureViewPreview.isAvailable()) {
+            mCameraTextureViewPreview.setSurfaceTextureListener(mTextureListener);
+        } else {
+            CameraUtils.getInstance().startPreview();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
+    private TextureView.SurfaceTextureListener mTextureListener = new TextureView.
+            SurfaceTextureListener() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
-        public void onOpened(@NonNull CameraDevice camera) {
-            mCameraDevice = camera;
-            takePreview();
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            CameraUtils.getInstance().setupCamera(width, height, mCameraTextureViewPreview.getSurfaceTexture());
+            new PermissionHelper.Builder(Permission.CAMERA)
+                    .setCallback(new PermissionCallback() {
+                        @Override
+                        public void onPermissionGranted() {
+                            CameraUtils.getInstance().openCamera();
+                        }
+
+                        @Override
+                        public void onPermissionDenied() {
+
+                        }
+                    }).show(getSupportFragmentManager());
         }
 
         @Override
-        public void onDisconnected(@NonNull CameraDevice camera) {
-            if (null != mCameraDevice) {
-                mCameraDevice.close();
-                mCameraDevice = null;
-            }
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
 
         }
 
         @Override
-        public void onError(@NonNull CameraDevice camera, int error) {
-            Log.d("xieying", "摄像头开启失败" + error);
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            return false;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void takePreview() {
-        try {
-            final CaptureRequest.Builder previewRequestBuilder = mCameraDevice.createCaptureRequest(
-                    CameraDevice.TEMPLATE_PREVIEW);
-            previewRequestBuilder.addTarget(mSurfaceHolder.getSurface());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-
-                mCameraDevice.createCaptureSession(Arrays.asList(mSurfaceHolder.getSurface(),
-                        mImageReader.getSurface()), new CameraCaptureSession.StateCallback() {
-                    @Override
-                    public void onConfigured(CameraCaptureSession session) {
-                        if (null == mCameraDevice)
-                            return;
-                        mCameraCaptureSession = session;
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                                CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-                        CaptureRequest captureRequest = previewRequestBuilder.build();
-                        try {
-                            mCameraCaptureSession.setRepeatingRequest(captureRequest,
-                                    null, mChildHandler);
-                        } catch (CameraAccessException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onConfigureFailed(CameraCaptureSession session) {
-                        Log.d("xieying", "配置失败");
-                    }
-
-                }, mChildHandler);
-            }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+    @Override
+    protected void initEvent() {
     }
 
 
     @OnClick(R.id.camera_bt_back)
     public void back() {
+//        if (mCameraIvImage.getVisibility() == View.GONE) {
+        Bitmap bitmap = scaleImage(CameraUtils.getInstance().getBitmap(), 1080, 1920);
+        mCameraIvImage.setImageBitmap(bitmap);
+        mCameraIvImage.setVisibility(View.VISIBLE);
+        mCameraTextureViewPreview.setVisibility(View.GONE);
+//        } else {
+//            mCameraIvImage.setVisibility(View.GONE);
+//            mCameraTextureViewPreview.setVisibility(View.VISIBLE);
+//        }
+
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.camera_bt_phone)
     public void takePhone() {
-        if (null == mCameraDevice)
-            return;
-        CaptureRequest.Builder captureRequestBuilder;
-        try {
-            captureRequestBuilder = mCameraDevice.createCaptureRequest
-                    (CameraDevice.TEMPLATE_STILL_CAPTURE);
-            captureRequestBuilder.addTarget(mImageReader.getSurface());
-            captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-            int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        CameraUtils.getInstance().takePhoto(rotation);
+    }
 
-            CaptureRequest captureRequest = captureRequestBuilder.build();
-            mCameraCaptureSession.capture(captureRequest, null, mChildHandler);
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CameraUtils.getInstance().clear();
+    }
 
-
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+    public static Bitmap scaleImage(Bitmap bitmap, int newWidth, int newHeight) {
+        if (bitmap == null) {
+            return null;
         }
+        float scaleWidth = (float) newWidth / bitmap.getWidth();
+        float scaleHeight = (float) newHeight / bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 }

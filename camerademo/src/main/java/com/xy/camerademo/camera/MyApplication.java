@@ -13,10 +13,6 @@ public class MyApplication extends Application {
 
     private static Context context;
 
-    private static final String LCAPPID = "WvBYRS6ldWOze6tqaRaNyUNI-gzGzoHsz";
-    private static final String LCAPPKEY = "n82BI7x8lVE5jT95SJSgF9UW";
-    private static final String MIAPPID = "";
-    private static final String MIAPPKEY = "";
 
     @Override
     public void onCreate() {

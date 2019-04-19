@@ -14,7 +14,7 @@ public class LogUtils {
     private static Boolean isDebug;
 
     private static boolean isDebug() {
-        return isDebug == null ? false : isDebug;
+        return isDebug == null ? true : isDebug;
     }
 
     public static void debugMode() {
