@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="customRockerViewStyle" >
+        <item name="arrow_img">@drawable/ic_steeringwheel_thedirection</item>
+        <item name="area_img">@drawable/ic_steeringwheel_thedirectiondown</item>
+        <item name="rocker_img">@drawable/ic_steeringwheel_analogstick_on</item>
+    </style>
+
+    <style name="customArcProgressStyle">
+        <item name="arc_thumb_img">@mipmap/h_focal_length_ball</item>
+        <item name="arc_start_angle">210</item>
+        <item name="arc_sweep_angle">120</item>
+        <item name="arc_outside_stroke_width">6dp</item>
+        <item name="arc_middle_stroke_width">4dp</item>
+        <item name="arc_inside_stroke_width">1dp</item>
+    </style>
+</resources>

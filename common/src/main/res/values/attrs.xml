@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BendSeekBar">
+        <attr name="thumb_img" format="reference" />
+        <attr name="progress_img" format="reference" />
+        <attr name="progress_bg_img" format="reference" />
+        <attr name="isLeft" format="boolean" />
+        <attr name="thumb_width" format="dimension|reference" />
+        <attr name="thumb_height" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="RockerView">
+        <attr name="lock_position" format="boolean" />
+        <attr name="refresh_cycle" format="integer"/>
+        <attr name="arrow_img" format="reference" />
+        <attr name="area_img" format="reference" />
+        <attr name="rocker_img" format="reference" />
+        <attr name="reset_point_x" format="dimension|reference" />
+        <attr name="reset_point_y" format="dimension|reference" />
+        <attr name="reset_point_start" >
+            <enum name="left_top" value="0"/>
+            <enum name="right_top" value="1"/>
+            <enum name="left_button" value="2"/>
+            <enum name="right_button" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <!--定义theme可配置style-->
+    <attr name="customRockerViewAttr" format="reference"></attr>
+
+    <declare-styleable name="ArcProgress">
+        <attr name="arc_thumb_img" format="reference" />
+        <attr name="arc_start_angle" format="integer" />
+        <attr name="arc_sweep_angle" format="integer" />
+        <attr name="arc_margin_top" format="dimension|reference|integer" />
+        <attr name="arc_margin_left" format="dimension|reference|integer" />
+        <attr name="arc_outside_stroke_width" format="dimension|reference|integer" />
+        <attr name="arc_inside_stroke_width" format="dimension|reference|integer" />
+        <attr name="arc_middle_stroke_width" format="dimension|reference|integer" />
+
+    </declare-styleable>
+</resources>
