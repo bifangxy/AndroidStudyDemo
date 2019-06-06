@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <Button
+        android:id="@+id/btn_translate_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="translate animation!"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_scale_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scale animation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_translate_animation" />
+
+    <View
+        android:id="@+id/view_search"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_search_background"
+        android:transitionName="view_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_scale_animation" />
+
+    <TextView
+        android:id="@+id/tv_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="搜索"
+        android:transitionName="tv_search"
+        app:layout_constraintBottom_toBottomOf="@+id/view_search"
+        app:layout_constraintEnd_toEndOf="@id/view_search"
+        app:layout_constraintStart_toStartOf="@id/view_search"
+        app:layout_constraintTop_toTopOf="@+id/view_search" />
+
+
+    <Button
+        android:id="@+id/btn_alpha_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="alpha animation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_search" />
+
+    <Button
+        android:id="@+id/btn_rotation_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rotation animation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_alpha_animation" />
+
+    <Button
+        android:id="@+id/btn_group_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="group animation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_rotation_animation" />
+
+    <Button
+        android:id="@+id/btn_parabola_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="parabola animation"
+        android:transitionName="parabola animation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_group_animation" />
+
+
+</android.support.constraint.ConstraintLayout>
