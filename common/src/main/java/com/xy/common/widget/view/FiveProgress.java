@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -35,6 +36,8 @@ public class FiveProgress extends View {
     private Paint mLinePaint;
 
     private Paint mTextPaint;
+
+    private Paint mNewPaint;
 
     private int maxProgress = 5;
 
@@ -94,14 +97,20 @@ public class FiveProgress extends View {
         mLinePaint.setAntiAlias(true);
         mLinePaint.setStyle(Paint.Style.FILL);
         mLinePaint.setStrokeWidth(10);
+        mLinePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 
         mTextPaint = new Paint();
         mTextPaint.setColor(0xFFF7c528);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setTextSize(42);
-        mTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        mTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         mTextPaint.setTextAlign(Paint.Align.CENTER);
+
+        mNewPaint = new Paint();
+        mNewPaint.setColor(0xFFF7c528);
+        mNewPaint.setAntiAlias(true);
+        mNewPaint.setStyle(Paint.Style.FILL);
 
         mPaint.setColor(Color.WHITE);
         mPaint.setTextSize(LABEL_SIZE);
@@ -139,12 +148,19 @@ public class FiveProgress extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(0xFF008577);
+        canvas.drawColor(0x7F19191C);
 
+
+        canvas.drawLine(
+                DEFAULT_PADDING,
+                DEFAULT_PADDING + POINT_RADIUS,
+                getWidth() - DEFAULT_PADDING,
+                DEFAULT_PADDING + POINT_RADIUS,
+                mNewPaint);
         setDescribeText();
 //        canvas.drawOval(new RectF(0, 0, 50, 50), mPaint);
 
-        canvas.saveLayer(0, 0, getWidth(), getHeight(), mPaint);
+        int count = canvas.saveLayerAlpha(0, 0, getWidth(), getHeight(), 0xFF);
         canvas.drawLine(
                 DEFAULT_PADDING,
                 DEFAULT_PADDING + POINT_RADIUS,
@@ -153,22 +169,10 @@ public class FiveProgress extends View {
                 mLinePaint);
 
         for (int i = 0; i < maxProgress; i++) {
-//            if (i < progress) {
-//                mCirclePaint.setColor(0xFFF7c528);
-//                mLinePaint.setColor(0xFFF7c528);
-//                mTextPaint.setColor(0XFF000000);
-//            } else {
-//                mCirclePaint.setColor(0x7F19191C);
-//                mLinePaint.setColor(0x7F19191C);
-//                mTextPaint.setColor(0XFFFFFFFF);
-//            }
 
             int startCircle = radius + i * (lineLength + 2 * radius);
             int startLine = (i + 1) * (2 * radius) + i * lineLength;
             canvas.drawCircle(startCircle, DEFAULT_PADDING + POINT_RADIUS, POINT_RADIUS, mCirclePaint);
-//            if (i != 4) {
-//                canvas.drawLine(startLine, mYPosition, startLine + lineLength, mYPosition, mLinePaint);
-//            }
 //            Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
 //            float distance = (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
 //            baseLineY = mYPosition + distance;
@@ -181,7 +185,9 @@ public class FiveProgress extends View {
                 getWidth() * 40 / 100f,
                 getHeight(),
                 mTextPaint);
-        canvas.restore();
+        canvas.restoreToCount(count);
+
+
     }
 
     private void setDescribeText() {

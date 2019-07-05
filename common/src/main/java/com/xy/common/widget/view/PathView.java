@@ -67,7 +67,7 @@ public class PathView extends View {
         path.lineTo(300, 300);
 
         float baseline = 2*(mPaint.getFontMetrics().bottom)-mPaint.getFontMetrics().top;
-        canvas.drawText("看看是不是真的有效果", 10, baseline, mPaint);
+        canvas.drawText("", 10, baseline, mPaint);
 
 //        canvas.drawTextOnPath("看看是不是真的有效果", path, 0, 0, mPaint);
 

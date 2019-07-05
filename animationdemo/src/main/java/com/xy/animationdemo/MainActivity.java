@@ -190,20 +190,20 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.btn_parabola_animation)
     public void parabolaAnimation() {
         //使用自定义估值器
-//        mValueAnimator = ValueAnimator.ofObject(new MyTypeEvaluator(),
-//                new Point(mBtnParabolaAnimation.getX(), mBtnParabolaAnimation.getY()),
-//                new Point(mBtnParabolaAnimation.getX()+400, mBtnParabolaAnimation.getY()+300));
-//        mValueAnimator.setDuration(3000);
-//        mValueAnimator.setInterpolator(new LinearInterpolator());
-//        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animation) {
-//                Point point = (Point) animation.getAnimatedValue();
-//                mBtnParabolaAnimation.setX(point.getX());
-//                mBtnParabolaAnimation.setY(point.getY());
-//                mBtnParabolaAnimation.requestLayout();
-//            }
-//        });
+        mValueAnimator = ValueAnimator.ofObject(new MyTypeEvaluator(),
+                new Point(mBtnParabolaAnimation.getX(), mBtnParabolaAnimation.getY()),
+                new Point(mBtnParabolaAnimation.getX()+400, mBtnParabolaAnimation.getY()+300));
+        mValueAnimator.setDuration(3000);
+        mValueAnimator.setInterpolator(new LinearInterpolator());
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Point point = (Point) animation.getAnimatedValue();
+                mBtnParabolaAnimation.setX(point.getX());
+                mBtnParabolaAnimation.setY(point.getY());
+                mBtnParabolaAnimation.requestLayout();
+            }
+        });
     }
 
     @OnClick(R.id.view_search)

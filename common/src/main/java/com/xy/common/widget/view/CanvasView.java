@@ -18,11 +18,16 @@ import android.view.View;
  */
 public class CanvasView extends View {
 
+    private int DEFAULT_PADDING = 40;
+    private int POINT_RADIUS = 30;
+
     private Paint mPaint;
 
     private Paint mSrcPaint;
 
     private Paint mDstPaint;
+
+    private Paint mDstPaint1;
 
 
     public CanvasView(Context context) {
@@ -51,21 +56,34 @@ public class CanvasView extends View {
 
 
 
+
         mDstPaint = new Paint();
         mDstPaint.setColor(Color.RED);
         mDstPaint.setStyle(Paint.Style.FILL);
         mDstPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+
+        mDstPaint1 = new Paint();
+        mDstPaint1.setColor(Color.RED);
+        mDstPaint1.setStyle(Paint.Style.FILL);
+        mDstPaint1.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.saveLayer(0, 0, getWidth(), getHeight(), mPaint);
-        canvas.drawRect(0, 0, getWidth(), 2 * getHeight() / 3, mSrcPaint);
-//        canvas.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2, mSrcPaint);
 
+        canvas.saveLayer(0, 0, getWidth(), getHeight(), mPaint);
+//        canvas.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2, mSrcPaint);
+        canvas.drawRect(0, 0, getWidth(), 2 * getHeight() / 3, mSrcPaint);
         canvas.drawRect(50, 1 * getHeight() / 3, getWidth() - 50, getHeight(), mDstPaint);
+//        canvas.drawRect(0, 0, getWidth(), 2 * getHeight() / 3, mDstPaint1);
+
+//        canvas.drawRect(50, 1 * getHeight() / 3, getWidth() - 50, getHeight(), mDstPaint1);
+
         canvas.restore();
+
     }
 }

@@ -14,4 +14,10 @@
         <item name="arc_middle_stroke_width">4dp</item>
         <item name="arc_inside_stroke_width">1dp</item>
     </style>
+
+    <!-- dialog 淡入淡出动画 -->
+    <style name="DialogAnimationsFade" parent="@android:style/Theme.Dialog">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 </resources>

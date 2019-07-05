@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="guide_map">
+        <item>mipmap/ic_guide_cn_a</item>
+        <item>mipmap/ic_guide_cn_b</item>
+        <item>mipmap/ic_guide_cn_c</item>
+        <item>mipmap/ic_guide_cn_d</item>
+        <item>mipmap/ic_guide_cn_e</item>
+    </string-array>
+</resources>

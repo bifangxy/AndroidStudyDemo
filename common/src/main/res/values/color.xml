@@ -2,4 +2,5 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="yellow">#F7C528</color>
+    <color name="com_color_transparent">#00000000</color>
 </resources>

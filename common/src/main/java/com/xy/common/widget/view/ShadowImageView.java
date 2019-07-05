@@ -45,6 +45,12 @@ public class ShadowImageView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        LogUtils.d("----onMeasure-----");
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         LogUtils.d("width = " + getWidth() + "   height = " + getHeight());
